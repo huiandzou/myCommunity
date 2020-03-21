@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="nav">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">辉哥社区</span>
+                </button>
+                <a class="navbar-brand" th:href="@{/index/index.do}">辉哥社区</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="搜索问题">
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索</button>
+                </form>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown" >
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false" th:if="${session.gitHubUser} ne  null">通知
+                            <span class="badge" th:if="${session.noticsNum ne null}" th:text="${session.noticsNum}"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/community/notic/myNotice.do">通知中心</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" >
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">提问</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/community/publish/publish.do">问题</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" th:if="${session.gitHubUser} ne  null" >
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">
+                            <img th:src="${session.gitHubUser.avatarUrl}" th:alt="${session.gitHubUser.getName()}" class="img-circle" style="width: 32px;height: 32px">
+                            <!--<span th:text="${session.gitHubUser.getName()}"></span>
+                            <span class="caret"></span>-->
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/myQuestion/index.do}">私信</a></li>
+                            <li><a href="#">设置</a></li>
+                            <li><a th:href="@{/logOut}">退出</a></li>
+                        </ul>
+                    </li>
+                    <li th:if="${session.gitHubUser} eq null">
+                        <a href="https://github.com/login/oauth/authorize?client_id=ef32a1e0f6f10780b9d3&redirect_uri=http://localhost:8887/community/callback&scope=user&state=1">登入</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<div th:fragment="left">
+    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <div class="list-group">
+            <a href="#" class="list-group-item active">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                最新动态
+            </a>
+            <a href="#" class="list-group-item">
+                <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                我的草稿
+            </a>
+            <a href="#" class="list-group-item">
+                <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                我的收藏
+            </a>
+            <a href="#" class="list-group-item">
+                <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                我关注的问题
+            </a>
+            <a href="#" class="list-group-item">
+                <span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>
+                我关注的话题
+            </a>
+        </div>
+    </div>
+</div>
+<div th:fragment="questionLeft">
+    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h4>发起人</h4>
+            <div class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object img-circle" th:src="${question.user.avatarUrl}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading"><span th:text="${question.user.name}"></span></h4>
+                </div>
+            </div>
+        </div>
+        <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h4>推荐内容</h4>
+            <img th:src="@{/img/huige.jpg}" alt="" class="recomend-logo">
+        </div>
+        <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h4>相关问题</h4>
+            <ul class="question-related">
+                <li th:each="related : ${relatedQuestions}">
+                    <a th:href="@{'/question/'+${related.getId()}}" th:text="${related.title}"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

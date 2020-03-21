@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>通知</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-theme.min.css}">
+    <link rel="stylesheet" th:href="@{/css/community.css}">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" type="application/javascript"></script>
+    <script th:src="@{/js/bootstrap.min.js}" type="application/javascript"></script>
+</head>
+<body>
+<script type="application/javascript">
+</script>
+<div th:insert="~{navigation :: nav}"></div>
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>通知</h2>
+            <hr>
+            <div class="media" th:each="notice,noticeStat : ${notices}">
+                <div class="media-body">
+                    <a href="#" th:text="${notice.user.getName()}"></a>
+                    <span th:if="${notice.getType() eq 1}">
+                        评论了你的问题
+                      <a th:href="@{/notic/updateNoticeStatus.do(noticeId=${notice.getId() },questionId=${notice.getQuestion().getId()})}">
+                          <span th:text="${notice.question.getTitle()}"></span>
+                      </a>
+                    </span>
+                    <span th:if="${notice.getType() eq 2}">
+                        回复了你的评论
+                         <a th:href="@{/notic/updateNoticeStatus.do(noticeId=${notice.getId() },questionId=${notice.getQuestion().getId()})}">
+                        <span th:text="${notice.question.getTitle()}"></span>
+                         </a>
+                    </span>
+                    <span th:if="${notice.getType() eq 3}">
+                        点赞了你的问题
+                         <a th:href="@{/notic/updateNoticeStatus.do(noticeId=${notice.getId() },questionId=${notice.getQuestion().getId()})}">
+                        <span th:text="${notice.question.getTitle()}"></span>
+                         </a>
+                    </span>
+                    <span th:if="${notice.getType() eq 4}">
+                        点赞了你的评论
+                         <a th:href="@{/notic/updateNoticeStatus.do(noticeId=${notice.getId() },questionId=${notice.getQuestion().getId()})}">
+                        <span th:text="${notice.question.getTitle()}"></span>
+                         </a>
+                    </span>
+                </div>
+                <hr th:if="${not noticeStat.last}">
+            </div>
+
+        </div>
+        <hr >
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <h3>热门</h3>
+        </div>
+    </div>
+</div>
+</body>
+</html>
