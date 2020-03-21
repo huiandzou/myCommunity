@@ -58,6 +58,7 @@ public class IndexController {
             result = questionService.queryPaginationQuestionsForZeroComment(paginationDto);
         }
 
+
         model.addAttribute("result", result);
         model.addAttribute("sort_type", sortType);
         return "index";
