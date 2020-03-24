@@ -1,7 +1,5 @@
 package com.zh.community.community.intercepter;
 
-import com.zh.community.community.exception.CustomizeErrorCodeEnum;
-import com.zh.community.community.exception.CustomizeException;
 import com.zh.community.community.mapper.NotificationMapper;
 import com.zh.community.community.mapper.UserMapper;
 import com.zh.community.community.model.Notification;
@@ -16,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -37,24 +34,24 @@ public class SessionIntercepter implements HandlerInterceptor {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     accessToken = cookie.getValue();
+                    // 查询sql看这个token是否存在
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria().andTokenEqualTo(accessToken);
+                    List<User> users = userMapper.selectByExample(userExample);
+                    if (users.size() != 0) {
+                        NotificationExample notificationExample = new NotificationExample();
+                        notificationExample.createCriteria().andRecevierEqualTo(Long.valueOf(users.get(0).getId())).andStatusEqualTo(0);
+                        List<Notification> notifications = notificationMapper.selectByExample(notificationExample);
+                        // 设置session
+                        request.getSession().setAttribute("gitHubUser", users.get(0));
+                        if(notifications != null && notifications.size()>0){
+                            request.getSession().setAttribute("noticsNum", notifications.size());
+                        }
+                    }
                     break;
                 }
             }
-            // 查询sql看这个token是否存在
-            UserExample userExample = new UserExample();
-            userExample.createCriteria().andTokenEqualTo(accessToken);
 
-            List<User> users = userMapper.selectByExample(userExample);
-            NotificationExample notificationExample = new NotificationExample();
-            notificationExample.createCriteria().andRecevierEqualTo(Long.valueOf(users.get(0).getId())).andStatusEqualTo(0);
-            List<Notification> notifications = notificationMapper.selectByExample(notificationExample);
-            if (users.size() != 0) {
-                // 设置session
-                request.getSession().setAttribute("gitHubUser", users.get(0));
-               if(notifications != null && notifications.size()>0){
-                   request.getSession().setAttribute("noticsNum", notifications.size());
-               }
-            }
         }
         return true;
     }
