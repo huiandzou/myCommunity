@@ -3,7 +3,6 @@ package com.zh.community.community.controller;
 import com.zh.community.community.dto.PaginationDto;
 import com.zh.community.community.model.User;
 import com.zh.community.community.service.QuestionService;
-import com.zh.community.community.study.StudyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,11 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 public class MyQuestionController {
     @Autowired
     private QuestionService questionService;
-    @Autowired
-    StudyService studyService;
+
     @RequestMapping("/index.do")
     public String index(HttpServletRequest request, Model model){
-        studyService.getName();
         User user = (User) request.getSession().getAttribute("gitHubUser");
         if(null == user){
             return "redirect:/index/index.do";

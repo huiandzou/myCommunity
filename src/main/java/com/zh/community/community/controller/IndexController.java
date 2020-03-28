@@ -2,7 +2,6 @@ package com.zh.community.community.controller;
 
 import com.zh.community.community.dto.PaginationDto;
 import com.zh.community.community.service.QuestionService;
-import com.zh.community.community.study.StudyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +21,9 @@ public class IndexController {
     private static final Logger logger=LoggerFactory.getLogger(IndexController.class);
     @Autowired
     private QuestionService questionService;
-    @Autowired
-    StudyService studyService;
     @GetMapping("/index.do")
     public String index(HttpServletRequest request,Model model){
         logger.error("test bean ={}",questionService);
-        studyService.test();
         PaginationDto paginationDto = new PaginationDto(1, 5);
         // 查询首页内容
         String sortType = request.getParameter("sort_type");

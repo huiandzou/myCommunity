@@ -1,6 +1,7 @@
 package com.zh.community.community.controller;
 
 import com.zh.community.community.dto.TagDto;
+import com.zh.community.community.intercepter.Permission;
 import com.zh.community.community.model.Question;
 import com.zh.community.community.model.User;
 import com.zh.community.community.service.QuestionService;
@@ -24,6 +25,7 @@ public class PublishController {
     QuestionService questionService;
     @Autowired
     private TagService tagService;
+    @Permission
     @RequestMapping("/publish.do")
     public String toPublish(Model model){
         // 添加时候把标签内容带上
@@ -31,6 +33,7 @@ public class PublishController {
         model.addAttribute("tags", parentTag);
         return "publish";
     }
+    @Permission
     @RequestMapping("/submit.do")
     public String publish(Question question, HttpServletRequest request, Model model) {
         if (StringUtils.isEmpty(question.getTitle()) || StringUtils.isEmpty(question.getDescription()) || StringUtils.isEmpty(question.getTag())) {

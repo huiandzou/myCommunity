@@ -2,9 +2,9 @@ package com.zh.community.community.controller;
 
 import com.zh.community.community.dto.CommentDTO;
 import com.zh.community.community.dto.ResultDTO;
-import com.zh.community.community.exception.CustomizeErrorCode;
 import com.zh.community.community.exception.CustomizeErrorCodeEnum;
 import com.zh.community.community.exception.CustomizeException;
+import com.zh.community.community.intercepter.Permission;
 import com.zh.community.community.model.User;
 import com.zh.community.community.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +27,7 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    @Permission
     @RequestMapping("/add.do")
     @ResponseBody
     public Object addComment(HttpServletRequest request, @RequestBody CommentDTO commentDTO) {
@@ -52,6 +53,7 @@ public class CommentController {
         return resultDTO;
     }
 
+    @Permission
     @RequestMapping("/queryAnswers.do")
     @ResponseBody
     public Object queryAnswers(HttpServletRequest request, @RequestBody CommentDTO commentDTO) {

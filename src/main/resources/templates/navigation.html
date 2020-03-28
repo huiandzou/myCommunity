@@ -53,7 +53,7 @@
                         </ul>
                     </li>
                     <li th:if="${session.gitHubUser} eq null">
-                        <a href="https://github.com/login/oauth/authorize?client_id=ef32a1e0f6f10780b9d3&redirect_uri=http://localhost:8887/community/callback&scope=user&state=1">登入</a>
+                        <a th:href="${session.loggingPath}">登入</a>
                     </li>
                 </ul>
             </div>

@@ -2,6 +2,7 @@ package com.zh.community.community.controller;
 
 import com.zh.community.community.dto.CommentDTO;
 import com.zh.community.community.dto.QuestionDto;
+import com.zh.community.community.intercepter.Permission;
 import com.zh.community.community.model.Question;
 import com.zh.community.community.service.CommentService;
 import com.zh.community.community.service.QuestionService;
@@ -34,6 +35,7 @@ public class QuestionController {
         model.addAttribute("relatedQuestions", recomendQuestions);
         return "question";
     }
+    @Permission
     @RequestMapping("/edit/{id}")
     public String editQuestion(@PathVariable(name = "id") Integer id, Model model){
         QuestionDto questionDto = questionService.getById(id);

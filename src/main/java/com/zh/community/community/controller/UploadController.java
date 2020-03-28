@@ -1,6 +1,7 @@
 package com.zh.community.community.controller;
 
 import com.zh.community.community.constant.OSSClientUtil;
+import com.zh.community.community.intercepter.Permission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class UploadController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UploadController.class);
     @Autowired
     private OSSClientUtil ossClientUtil;
+    @Permission
     @RequestMapping("uploadImg.do")
     @ResponseBody
     public Object uploadImg(HttpServletRequest request) throws IOException {

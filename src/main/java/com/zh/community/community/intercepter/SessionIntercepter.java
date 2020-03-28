@@ -1,7 +1,5 @@
 package com.zh.community.community.intercepter;
 
-import com.zh.community.community.exception.CustomizeErrorCodeEnum;
-import com.zh.community.community.exception.CustomizeException;
 import com.zh.community.community.mapper.NotificationMapper;
 import com.zh.community.community.mapper.UserMapper;
 import com.zh.community.community.model.Notification;
@@ -9,20 +7,18 @@ import com.zh.community.community.model.NotificationExample;
 import com.zh.community.community.model.User;
 import com.zh.community.community.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
  * created by ${host}
  */
-@Service
+//@Service
 public class SessionIntercepter implements HandlerInterceptor {
     @Autowired
     UserMapper userMapper;
