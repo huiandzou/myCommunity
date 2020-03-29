@@ -21,6 +21,7 @@ public class IndexController {
     private static final Logger logger=LoggerFactory.getLogger(IndexController.class);
     @Autowired
     private QuestionService questionService;
+
     @GetMapping("/index.do")
     public String index(HttpServletRequest request,Model model){
         logger.error("test bean ={}",questionService);

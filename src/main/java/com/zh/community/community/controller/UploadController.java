@@ -40,4 +40,15 @@ public class UploadController {
         resultMap.put("url",url);
         return resultMap;
     }
+
+    @RequestMapping("uploadLogo.do")
+    @ResponseBody
+    public String uploadLogo(HttpServletRequest request){
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        MultipartFile file = multipartRequest.getFile("logo-upload");
+        String name = ossClientUtil.uploadImg2Oss(file);
+        LOGGER.info("文件上传结束：{}","img2Oss");
+        String url = ossClientUtil.getImgUrl(name);
+        return "<script>parent.uploadPicCallbackBanner('" +url+ "');</script>";
+    }
 }

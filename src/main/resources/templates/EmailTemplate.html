@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>邮件模板</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div class="jumbotron">
+    <h1>恭喜您注册辉哥社区</h1>
+    <p>你注册使用的验证码为:
+    <span th:text="${msg}" style="color: red"> </span>
+    </p>
+    <div>
+        <a href="http://localhost:8887/community/index/index.do">http://localhost:8887/community/index/index.do</a>
+    </div>
+</div>
+</body>
+</html>

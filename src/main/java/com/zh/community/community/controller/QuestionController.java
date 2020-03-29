@@ -3,6 +3,7 @@ package com.zh.community.community.controller;
 import com.zh.community.community.dto.CommentDTO;
 import com.zh.community.community.dto.QuestionDto;
 import com.zh.community.community.intercepter.Permission;
+import com.zh.community.community.intercepter.ViewCount;
 import com.zh.community.community.model.Question;
 import com.zh.community.community.service.CommentService;
 import com.zh.community.community.service.QuestionService;
@@ -26,6 +27,7 @@ public class QuestionController {
     @Autowired
     private CommentService commentService;
     @RequestMapping("/{id}")
+    @ViewCount
     public String queryQuestion(@PathVariable(name = "id") Integer id, Model model){
       QuestionDto questionDto = questionService.getById(id);
         List<CommentDTO> commentDTOS =  commentService.list(id);

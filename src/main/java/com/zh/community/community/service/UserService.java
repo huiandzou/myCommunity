@@ -1,8 +1,10 @@
 package com.zh.community.community.service;
 
+import com.zh.community.community.dto.UserDto;
 import com.zh.community.community.mapper.UserMapper;
 import com.zh.community.community.model.User;
 import com.zh.community.community.model.UserExample;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,4 +49,49 @@ public class UserService {
         return users.get(0);
     }
 
+    public User queryUserByEmail(UserDto userDto) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andEmailAddressEqualTo(userDto.getEmailAddress());
+        List<User> users = userMapper.selectByExample(userExample);
+        if(users !=null && users.size()>0){
+            return users.get(0);
+        }
+        return null;
+    }
+
+    public boolean register(UserDto userDto) {
+        User user = new User();
+        BeanUtils.copyProperties(userDto,user);
+        user.setGmtCreate(System.currentTimeMillis());
+        int insert = userMapper.insert(user);
+        if(insert>0){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean signIn(User user) {
+        User user1 = new User();
+        user1.setId(user.getId());
+        user1.setGmtModified(user.getGmtModified());
+        user1.setToken(user.getToken());
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andIdEqualTo(user.getId());
+        int i = userMapper.updateByExampleSelective(user1, userExample);
+        if(i>0){
+            return true;
+        }
+        return false;
+    }
+
+    public User queryUserByLogin(UserDto userDto) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andEmailAddressEqualTo(userDto.getEmailAddress())
+                .andEmailPassWordEqualTo(userDto.getEmailPassWord());
+        List<User> users = userMapper.selectByExample(userExample);
+        if(users !=null && users.size()>0){
+            return users.get(0);
+        }
+        return null;
+    }
 }

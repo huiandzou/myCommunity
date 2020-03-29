@@ -1,0 +1,242 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" type="application/javascript"></script>
+</head>
+<head>
+    <meta charset="utf-8">
+    <title>登入</title>
+    <style type="text/css">
+        body {
+            background: url("../img/blue4.jpg") no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            background-color: #CCCCCC;
+        }
+
+        #wrap .logGet {
+            height: 650px;
+            width: 368px;
+            position: absolute;
+            background-color: #FFFFFF;
+            top: 20%;
+            right: 15%;
+        }
+
+        .logC button {
+            width: 100%;
+            height: 45px;
+            background-color: #ee7700;
+            border: none;
+            color: white;
+            font-size: 18px;
+        }
+
+        .logGet .logD.logDtip .p1 {
+            display: inline-block;
+            font-size: 28px;
+            margin-top: 30px;
+            width: 86%;
+        }
+
+        #wrap .logGet .logD.logDtip {
+            width: 86%;
+            border-bottom: 1px solid #ee7700;
+            margin-bottom: 60px;
+            margin-top: 0px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .logGet .lgD img {
+            position: absolute;
+            top: 12px;
+            left: 8px;
+        }
+
+        .logGet .lgD input {
+            width: 100%;
+            height: 42px;
+            text-indent: 2.5rem;
+        }
+
+        #wrap .logGet .lgD {
+            width: 86%;
+            position: relative;
+            margin-bottom: 30px;
+            margin-top: 30px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        #wrap .logGet .logC {
+            width: 86%;
+            margin-top: 0px;
+            margin-right: auto;
+            margin-bottom: 0px;
+            margin-left: auto;
+        }
+
+        .third-part a {
+            text-decoration: none;
+            font-size: 14px;
+            margin-right: 50px;
+            font-family: 宋体;
+            color: #C0C0C0;
+        }
+
+        .getCode {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="wrap" id="wrap">
+    <div class="logGet">
+        <!-- 头部提示信息 -->
+        <div class="logD logDtip">
+            <p class="p1">注册</p>
+        </div>
+        <form name="logoForm" action="" method="post">
+            <!-- 输入框 -->
+            <div class="lgD">
+                <input type="text"
+                       placeholder="输入邮箱" name="emailAddress" id="emailAddress"/>
+            </div>
+            <div class="lgD">
+                <input type="text"
+                       placeholder="输入验证码" name="validateCode" id="validateCode"/>
+                <span onclick="getCode()" class="getCode">
+                    获取验证码
+                </span>
+            </div>
+            <div class="lgD">
+                <input type="text"
+                       placeholder="输入用户昵称" name="name" id="name"/>
+            </div>
+            <div class="lgD">
+                <input type="password"
+                       placeholder="输入密码" name="emailPassWord" id="emailPassWord"/>
+            </div>
+            <div class="lgD">
+                <input type="password"
+                       placeholder="确认密码" id="emailPassWordAgain"/>
+            </div>
+            <div class="logC">
+                <button onclick="register()">
+                    注册
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+</body>
+<script>
+    function register() {
+        var emailAddress = $("#emailAddress").val();
+        var validateCode = $("#validateCode").val();
+        var name = $("#name").val();
+        var emailPassWord = $("#emailPassWord").val();
+        if (!checkParam()) {
+            return false;
+        }
+        $.ajax({
+            type: "post",
+            url: "http://localhost:8887/community/account/register.do",
+            data: {
+                emailAddress: emailAddress,
+                validateCode: validateCode,
+                name: name,
+                emailPassWord: emailPassWord
+            },
+            dataType: "json",
+            success: function (msg) {
+                if (msg.code == 200) {
+                    alert("注册成功，跳转登入");
+                    window.location.href = "http://localhost:8887/community/account/login";
+                } else {
+                    if (msg.code == 1002) {
+                        window.location.href = "http://localhost:8887/community/account/login";
+                    } else {
+                        alert(msg.message);
+                    }
+
+                }
+            },
+            error: function (data) {
+                alert("操作失败！");
+            }
+        });
+    }
+
+    function getCode() {
+        var email = $("#emailAddress").val();
+        $.ajax({
+            type: "get",
+            url: "http://localhost:8887/community/account/sendEmailValidate.do",
+            data: {
+                email: email
+            },
+            dataType: "json",
+            success: function (msg) {
+                if (msg) {
+                    if (msg.code == 200) {
+                        // 倒计时
+                        alert("倒计时开始啦")
+                    } else {
+                        alert(msg.message)
+                    }
+                }
+            },
+            error: function (msg) {
+                alert("操作失败！");
+            }
+        });
+
+
+    }
+
+    function checkParam() {
+        var emailAddress = $("#emailAddress").val();
+        var validateCode = $("#validateCode").val();
+        var name = $("#name").val();
+        var emailPassWord = $("#emailPassWord").val();
+        var emailPassWordAgain = $("#emailPassWordAgain").val();
+        if (emailAddress.trim().length < 1) {
+            alert("邮箱不能为空");
+            return false;
+        }
+        var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+        if (!reg.test(emailAddress)) {
+            alert("邮箱格式不对");
+            return false;
+        }
+        if (validateCode.trim().length < 1) {
+            alert("请输入验证码");
+            return false;
+        }
+        if (name.trim().length < 1) {
+            alert("昵称不能为空");
+            return false;
+        }
+        if (emailPassWord.trim().length < 1) {
+            alert("密码不能为空");
+            return false;
+        }
+        if (emailPassWordAgain.trim().length < 1) {
+            alert("再次输入密码");
+            return false;
+        }
+        if (emailPassWord.equals(emailPassWordAgain)) {
+            alert("两次密码输入不对");
+            return false;
+        }
+        return true;
+    }
+</script>
+</html>

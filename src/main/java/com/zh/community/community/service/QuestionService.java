@@ -1,5 +1,7 @@
 package com.zh.community.community.service;
 
+import com.zh.community.community.constant.RedisConstant;
+import com.zh.community.community.constant.RedisUtil;
 import com.zh.community.community.dto.PaginationDto;
 import com.zh.community.community.dto.QuestionDto;
 import com.zh.community.community.exception.CustomizeErrorCodeEnum;
@@ -31,6 +33,8 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private RedisUtil redisUtil;
     public List<QuestionDto> queryQuestion() {
         List<QuestionDto> questionDtos = new ArrayList<>();
         // 首先把问题数据捞出来
@@ -44,9 +48,15 @@ public class QuestionService {
             QuestionDto questionDto = new QuestionDto();
             BeanUtils.copyProperties(question, questionDto);
             questionDto.setUser(users.get(0));
+            questionDto.setViewCount(getViewCount(questionDto.getId()));
             questionDtos.add(questionDto);
         }
         return questionDtos;
+    }
+
+    private Integer getViewCount(Integer id) {
+        Object viewCount = redisUtil.get(RedisConstant.QUESTION_VIEW_COUNT + id);
+        return(Integer)viewCount;
     }
 
     /**
@@ -70,6 +80,7 @@ public class QuestionService {
             QuestionDto questionDto = new QuestionDto();
             BeanUtils.copyProperties(question, questionDto);
             questionDto.setUser(users.get(0));
+            questionDto.setViewCount(getViewCount(questionDto.getId()));
             questionDtos.add(questionDto);
         }
         paginationDto.setListQuestion(questionDtos);
@@ -101,6 +112,7 @@ public class QuestionService {
             QuestionDto questionDto = new QuestionDto();
             BeanUtils.copyProperties(question, questionDto);
             questionDto.setUser(users.get(0));
+            questionDto.setViewCount(getViewCount(questionDto.getId()));
             questionDtos.add(questionDto);
         }
         paginationDto.setListQuestion(questionDtos);
@@ -128,6 +140,7 @@ public class QuestionService {
             QuestionDto questionDto = new QuestionDto();
             BeanUtils.copyProperties(question, questionDto);
             questionDto.setUser(users.get(0));
+            questionDto.setViewCount(getViewCount(questionDto.getId()));
             questionDtos.add(questionDto);
         }
         paginationDto.setListQuestion(questionDtos);
@@ -152,6 +165,7 @@ public class QuestionService {
             QuestionDto questionDto = new QuestionDto();
             BeanUtils.copyProperties(question, questionDto);
             questionDto.setUser(users.get(0));
+            questionDto.setViewCount(getViewCount(questionDto.getId()));
             questionDtos.add(questionDto);
         }
         paginationDto.setListQuestion(questionDtos);
@@ -170,6 +184,7 @@ public class QuestionService {
         userExample.createCriteria().andIdEqualTo(question.getCreator());
         List<User> users = userMapper.selectByExample(userExample);
         questionDto.setUser(users.get(0));
+        questionDto.setViewCount(getViewCount(questionDto.getId()));
         return questionDto;
     }
 
@@ -210,6 +225,7 @@ public class QuestionService {
 
     public Question queryQuestionById(Long outerId) {
         Question question = questionMapper.selectByPrimaryKey(outerId.intValue());
+        question.setViewCount(getViewCount(question.getId()));
         return question;
     }
 }
