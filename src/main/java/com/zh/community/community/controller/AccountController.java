@@ -6,6 +6,8 @@ import com.zh.community.community.dto.UserDto;
 import com.zh.community.community.model.User;
 import com.zh.community.community.service.MailSendService;
 import com.zh.community.community.service.UserService;
+import com.zh.community.community.util.CommonUtils;
+import com.zh.community.community.util.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,13 @@ public class AccountController {
     private MailSendService mailSendService;
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RedisUtil redisUtil;
+
+    // 公用工具类
+    @Autowired
+    private CommonUtils commonUtils;
 
     @RequestMapping("/login")
     public String goToLogin(){
@@ -87,24 +96,36 @@ public class AccountController {
         if (!validateParam(userDto, resultDTO)) {
             return resultDTO;
         }
-
+        String validateCode = (String) redisUtil.get(userDto.getEmailAddress());
         // 校验验证码匹配
-        Cookie[] cookies = request.getCookies();
-        List<Cookie> cookieList = Arrays.stream(cookies).filter(c -> "code".equals(c.getName())).collect(Collectors.toList());
-        if (cookieList.size() > 0) {
-            Cookie cookie = cookieList.get(0);
-            String name = cookie.getValue();
-            if (!name.equals(userDto.getValidateCode())) {
+        if (!StringUtils.isEmpty(validateCode)){
+            resultDTO.setCode(1001);
+            resultDTO.setMessage("请重新获取验证码");
+            return resultDTO;
+        }
+        if (!validateCode.equals(userDto.getValidateCode())) {
                 resultDTO.setCode(1001);
                 resultDTO.setMessage("验证码输入不对");
                 return resultDTO;
             }
 
-        }else {
-            resultDTO.setCode(1001);
-            resultDTO.setMessage("请重新获取验证码");
-            return resultDTO;
-        }
+
+//        Cookie[] cookies = request.getCookies();
+//        List<Cookie> cookieList = Arrays.stream(cookies).filter(c -> "code".equals(c.getName())).collect(Collectors.toList());
+//        if (cookieList.size() > 0) {
+//            Cookie cookie = cookieList.get(0);
+//            String name = cookie.getValue();
+//            if (!name.equals(userDto.getValidateCode())) {
+//                resultDTO.setCode(1001);
+//                resultDTO.setMessage("验证码输入不对");
+//                return resultDTO;
+//            }
+//
+//        }else {
+//            resultDTO.setCode(1001);
+//            resultDTO.setMessage("请重新获取验证码");
+//            return resultDTO;
+//        }
         // 是否有过注册验证
         User user = userService.queryUserByEmail(userDto);
         if (null != user) {
@@ -167,10 +188,11 @@ public class AccountController {
             return resultDTO;
         }
         // 随机数字生成正确邮箱  然后发送邮件
-        StringBuilder stringBuilder = new StringBuilder();
-        this.generateCode(stringBuilder);
+//        StringBuilder stringBuilder = new StringBuilder();
+//        this.generateCode(stringBuilder);
+        String randomSixNum = commonUtils.getRandomSixNum();
         try {
-            mailSendService.sendMimeMessageWithValidateCode(email, stringBuilder.toString());
+            mailSendService.sendMimeMessageWithValidateCode(email, randomSixNum/*stringBuilder.toString()*/);
         } catch (MessagingException e) {
             LOGGER.error("sendEmailValidate fail error:{}", e);
             resultDTO.setCode(1001);
@@ -179,9 +201,10 @@ public class AccountController {
         }
 
         // 设置缓存验证码时间 60秒 后期加上redis缓存使用
-        Cookie cookie = new Cookie("code", stringBuilder.toString());
-        cookie.setMaxAge(360);
-        response.addCookie(cookie);
+//        Cookie cookie = new Cookie("code", stringBuilder.toString());
+//        cookie.setMaxAge(360);
+//        response.addCookie(cookie);
+        redisUtil.set(email,randomSixNum,60);
         return resultDTO;
     }
 

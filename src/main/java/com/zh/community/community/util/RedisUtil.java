@@ -1,4 +1,4 @@
-package com.zh.community.community.constant;
+package com.zh.community.community.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundListOperations;

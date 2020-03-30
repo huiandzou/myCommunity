@@ -1,4 +1,4 @@
-package com.zh.community.community.constant;
+package com.zh.community.community.util;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;

@@ -1,7 +1,7 @@
 package com.zh.community.community.service;
 
 import com.zh.community.community.constant.RedisConstant;
-import com.zh.community.community.constant.RedisUtil;
+import com.zh.community.community.util.RedisUtil;
 import com.zh.community.community.dto.PaginationDto;
 import com.zh.community.community.dto.QuestionDto;
 import com.zh.community.community.exception.CustomizeErrorCodeEnum;

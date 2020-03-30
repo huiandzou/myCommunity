@@ -1,6 +1,6 @@
 package com.zh.community.community.controller;
 
-import com.zh.community.community.constant.OSSClientUtil;
+import com.zh.community.community.util.OSSClientUtil;
 import com.zh.community.community.intercepter.Permission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

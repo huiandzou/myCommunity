@@ -2,7 +2,7 @@ package com.zh.community.community.intercepter;
 
 import com.alibaba.fastjson.JSON;
 import com.zh.community.community.constant.RedisConstant;
-import com.zh.community.community.constant.RedisUtil;
+import com.zh.community.community.util.RedisUtil;
 import com.zh.community.community.mapper.NotificationMapper;
 import com.zh.community.community.mapper.UserMapper;
 import com.zh.community.community.model.Notification;
