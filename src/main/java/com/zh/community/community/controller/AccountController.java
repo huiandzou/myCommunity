@@ -109,7 +109,6 @@ public class AccountController {
                 return resultDTO;
             }
 
-
 //        Cookie[] cookies = request.getCookies();
 //        List<Cookie> cookieList = Arrays.stream(cookies).filter(c -> "code".equals(c.getName())).collect(Collectors.toList());
 //        if (cookieList.size() > 0) {
