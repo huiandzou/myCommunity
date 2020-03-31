@@ -21,25 +21,28 @@ import java.util.List;
 @RequestMapping("/question")
 @Controller
 public class QuestionController {
+
     @Autowired
     private QuestionService questionService;
 
     @Autowired
     private CommentService commentService;
+
     @RequestMapping("/{id}")
     @ViewCount
-    public String queryQuestion(@PathVariable(name = "id") Integer id, Model model){
-      QuestionDto questionDto = questionService.getById(id);
-        List<CommentDTO> commentDTOS =  commentService.list(id);
+    public String queryQuestion(@PathVariable(name = "id") Integer id, Model model) {
+        QuestionDto questionDto = questionService.getById(id);
+        List<CommentDTO> commentDTOS = commentService.list(id);
         List<Question> recomendQuestions = questionService.quesryRecomendQuestions(questionDto);
         model.addAttribute("comments", commentDTOS);
         model.addAttribute("question", questionDto);
         model.addAttribute("relatedQuestions", recomendQuestions);
         return "question";
     }
+
     @Permission
     @RequestMapping("/edit/{id}")
-    public String editQuestion(@PathVariable(name = "id") Integer id, Model model){
+    public String editQuestion(@PathVariable(name = "id") Integer id, Model model) {
         QuestionDto questionDto = questionService.getById(id);
         model.addAttribute("question", questionDto);
         return "edit";
